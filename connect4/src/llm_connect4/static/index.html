@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A local Connect Four workbench shared by a browser player and command-line sessions.">
+  <title>LLM Connect Four · Local game workbench</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <header class="topbar">
+      <a class="brand-lockup" href="/" aria-label="LLM Connect Four">
+        <span class="brand-mark" aria-hidden="true">●</span>
+        <span class="brand-copy">
+          <span class="eyebrow" data-i18n="brand.tagline">LOCAL GAME · SHARED BOARD</span>
+          <strong>LLM Connect Four</strong>
+        </span>
+      </a>
+      <div class="topbar-meta">
+        <span class="match-id" id="match-id" data-i18n="match.none">No game</span>
+        <label class="locale-control" for="toolbar-locale">
+          <span class="locale-label" data-i18n="language.label">Language</span>
+          <select id="toolbar-locale" class="locale-select" data-locale-select data-i18n-aria-label="language.label" aria-label="Language">
+            <option value="en">English</option><option value="ko">한국어</option>
+            <option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option>
+            <option value="ja">日本語</option><option value="es">Español</option>
+            <option value="fr">Français</option><option value="de">Deutsch</option>
+          </select>
+        </label>
+        <nav class="game-actions" data-i18n-aria-label="toolbar.actions" aria-label="Game actions">
+          <button class="button button-secondary button-compact" id="takeback-button" data-i18n="toolbar.takeback" type="button">Take back</button>
+          <button class="button button-danger button-compact" id="resign-button" data-i18n="toolbar.resign" type="button">Resign</button>
+          <button class="button button-secondary button-compact" id="new-game-button" data-i18n="toolbar.newGame" type="button">New game</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="workspace" data-i18n-aria-label="workspace.aria" aria-label="Connect Four workbench">
+      <section class="board-workspace" aria-labelledby="board-title">
+        <div class="workspace-heading">
+          <div>
+            <p class="section-label" data-i18n="board.section">BOARD</p>
+            <h1 id="board-title" data-i18n="board.currentGame">Current game</h1>
+          </div>
+          <p class="board-caption" id="board-caption" data-i18n="board.caption.setup">Waiting for a game</p>
+        </div>
+        <div class="board-stage">
+          <div class="connect4-surface">
+            <div class="drop-columns" id="drop-columns" role="group" data-i18n-aria-label="board.controls" aria-label="Choose a column">
+              <button type="button" class="drop-button" data-column="1" aria-label="Drop in column 1">1</button>
+              <button type="button" class="drop-button" data-column="2" aria-label="Drop in column 2">2</button>
+              <button type="button" class="drop-button" data-column="3" aria-label="Drop in column 3">3</button>
+              <button type="button" class="drop-button" data-column="4" aria-label="Drop in column 4">4</button>
+              <button type="button" class="drop-button" data-column="5" aria-label="Drop in column 5">5</button>
+              <button type="button" class="drop-button" data-column="6" aria-label="Drop in column 6">6</button>
+              <button type="button" class="drop-button" data-column="7" aria-label="Drop in column 7">7</button>
+            </div>
+            <div class="connect4-board" id="connect4-board" role="grid" data-i18n-aria-label="board.aria" aria-label="Connect Four board" aria-readonly="true"></div>
+          </div>
+        </div>
+        <div class="board-status-line" aria-live="polite" aria-atomic="true">
+          <span class="status-dot" id="status-dot" aria-hidden="true"></span>
+          <span id="board-status" tabindex="-1" data-i18n="status.connecting">Connecting to the server.</span>
+          <span class="status-separator" aria-hidden="true">·</span>
+          <span id="revision-label">REV 0</span>
+        </div>
+      </section>
+
+      <aside class="info-rail" data-i18n-aria-label="rail.aria" aria-label="Game details">
+        <section class="turn-section" aria-labelledby="turn-heading">
+          <div class="section-kicker">
+            <span class="section-label" id="turn-heading" data-i18n="turn.heading">ACTIVE TURN</span>
+            <span class="live-indicator" id="live-indicator"><i aria-hidden="true"></i><span data-i18n="connection.live">LIVE</span></span>
+          </div>
+          <div class="clock-face" id="clock-face" data-tone="setup">
+            <span class="clock-label" id="clock-label" data-i18n="clock.setup.label">GAME READY</span>
+            <strong class="clock-value" id="clock-value" data-i18n="clock.setup.value">—</strong>
+            <span class="clock-detail" id="clock-detail" data-i18n="clock.setup.detail">Choose a color to begin.</span>
+          </div>
+          <div class="participant-strip" id="participant-strip" aria-live="polite"></div>
+        </section>
+
+        <section class="rail-section last-move-section" aria-labelledby="last-move-heading">
+          <div class="section-heading-row"><h2 id="last-move-heading" data-i18n="lastMove.heading">LAST DROP</h2></div>
+          <p class="last-move-value" id="last-move-value" data-i18n="lastMove.empty">No moves yet</p>
+          <p class="last-move-meta" id="last-move-meta" data-i18n="lastMove.waiting">Waiting for the first move</p>
+        </section>
+
+        <section class="rail-section move-history-section" aria-labelledby="move-history-heading">
+          <div class="section-heading-row">
+            <h2 id="move-history-heading" data-i18n="history.heading">MOVE HISTORY</h2>
+            <span class="section-index" id="move-count" aria-label="0 moves">0</span>
+          </div>
+          <ol class="move-list" id="move-list" data-i18n-aria-label="history.aria" aria-label="Move history"></ol>
+          <p class="empty-history" id="empty-history" data-i18n="history.empty">Moves will appear here after the game starts.</p>
+        </section>
+
+        <section class="rail-section guide-section" id="guide-section" aria-labelledby="guide-heading" hidden>
+          <details class="guide-details" id="connection-guide" data-i18n-aria-label="guide.aria" aria-label="CLI game guide">
+            <summary id="guide-heading" data-i18n="guide.summary">Connect two CLI players</summary>
+            <div class="guide-body">
+              <p class="guide-description" data-i18n="guide.description">Run one independent CLI session for each color. This browser only watches the shared game.</p>
+              <div class="guide-participant" data-guide-color="red">
+                <div class="guide-participant-heading"><strong data-guide-title="red">Red player</strong><span class="color-disc disc-red" aria-hidden="true"></span></div>
+                <span class="guide-label" data-i18n="guide.commandLabel">Commands</span>
+                <code class="guide-code" data-guide-command="red"></code>
+                <button class="button button-ghost button-compact guide-copy-button" type="button" data-copy-kind="command" data-copy-color="red" data-i18n="guide.copyCommand">Copy commands</button>
+                <span class="guide-label" data-i18n="guide.promptLabel">Session prompt</span>
+                <code class="guide-code guide-prompt" data-guide-prompt="red"></code>
+                <button class="button button-ghost button-compact guide-copy-button" type="button" data-copy-kind="prompt" data-copy-color="red" data-i18n="guide.copyPrompt">Copy prompt</button>
+              </div>
+              <div class="guide-participant" data-guide-color="yellow">
+                <div class="guide-participant-heading"><strong data-guide-title="yellow">Yellow player</strong><span class="color-disc disc-yellow" aria-hidden="true"></span></div>
+                <span class="guide-label" data-i18n="guide.commandLabel">Commands</span>
+                <code class="guide-code" data-guide-command="yellow"></code>
+                <button class="button button-ghost button-compact guide-copy-button" type="button" data-copy-kind="command" data-copy-color="yellow" data-i18n="guide.copyCommand">Copy commands</button>
+                <span class="guide-label" data-i18n="guide.promptLabel">Session prompt</span>
+                <code class="guide-code guide-prompt" data-guide-prompt="yellow"></code>
+                <button class="button button-ghost button-compact guide-copy-button" type="button" data-copy-kind="prompt" data-copy-color="yellow" data-i18n="guide.copyPrompt">Copy prompt</button>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section class="rail-section rail-footer" aria-label="Connection status" data-i18n-aria-label="connection.aria">
+          <div class="connection-row"><span class="connection-label" data-i18n="connection.label">Connection</span><span class="connection-value" id="connection-value" data-i18n="connection.connecting">Checking</span></div>
+          <p class="error-copy" id="error-copy" role="alert" hidden></p>
+        </section>
+      </aside>
+    </main>
+
+    <section class="setup-layer" id="setup-layer" aria-labelledby="setup-heading" hidden>
+      <div class="setup-panel" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="setup-heading" aria-describedby="setup-description">
+        <div class="setup-toolbar">
+          <p class="eyebrow" data-i18n="setup.eyebrow">NEW GAME · SETUP</p>
+          <label class="locale-control" for="setup-locale">
+            <span class="locale-label" data-i18n="language.label">Language</span>
+            <select id="setup-locale" class="locale-select" data-locale-select data-i18n-aria-label="language.label" aria-label="Language">
+              <option value="en">English</option><option value="ko">한국어</option>
+              <option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option>
+              <option value="ja">日本語</option><option value="es">Español</option>
+              <option value="fr">Français</option><option value="de">Deutsch</option>
+            </select>
+          </label>
+        </div>
+        <h2 id="setup-heading" data-i18n="setup.heading">Set up a new game</h2>
+        <p class="setup-copy" id="setup-description" data-i18n="setup.description">Choose how to play. Red always drops first.</p>
+        <div class="setup-group">
+          <span class="setup-group-label" data-i18n="setup.modeLabel">Game mode</span>
+          <div class="mode-choice" data-i18n-aria-label="setup.modeAria" role="group" aria-label="Game mode selection">
+            <button class="mode-button is-selected" type="button" data-mode="human_vs_llm" aria-pressed="true"><strong data-i18n="setup.mode.human.label">Human vs LLM</strong><small data-i18n="setup.mode.human.detail">Play one color in the browser</small></button>
+            <button class="mode-button" type="button" data-mode="cli_vs_cli" aria-pressed="false"><strong data-i18n="setup.mode.cli.label">CLI vs CLI</strong><small data-i18n="setup.mode.cli.detail">Watch two independent sessions</small></button>
+          </div>
+        </div>
+        <div class="setup-group" id="human-color-fields">
+          <span class="setup-group-label" data-i18n="setup.colorLabel">Your color</span>
+          <div class="color-choice" data-i18n-aria-label="setup.colorAria" role="group" aria-label="Choose your color">
+            <button class="color-button is-selected" type="button" data-color="red" aria-pressed="true"><span class="color-glyph disc-red" aria-hidden="true"></span><span><strong data-i18n="color.red">Red</strong><small data-i18n="setup.red.detail">Moves first</small></span></button>
+            <button class="color-button" type="button" data-color="yellow" aria-pressed="false"><span class="color-glyph disc-yellow" aria-hidden="true"></span><span><strong data-i18n="color.yellow">Yellow</strong><small data-i18n="setup.yellow.detail">Moves second</small></span></button>
+          </div>
+        </div>
+        <div class="setup-group cli-name-fields" id="cli-name-fields">
+          <span class="setup-group-label" data-i18n="setup.namesLabel">Player names</span>
+          <div class="name-choice">
+            <label class="name-field" for="red-name"><span data-i18n="color.red">Red</span><input id="red-name" type="text" maxlength="80" autocomplete="off" data-i18n-placeholder="setup.namePlaceholder" placeholder="Optional name"></label>
+            <label class="name-field" for="yellow-name"><span data-i18n="color.yellow">Yellow</span><input id="yellow-name" type="text" maxlength="80" autocomplete="off" data-i18n-placeholder="setup.namePlaceholder" placeholder="Optional name"></label>
+          </div>
+        </div>
+        <div class="setup-rules" data-i18n="setup.rules">Drop discs into one of seven columns. Connect four horizontally, vertically, or diagonally to win.</div>
+        <button class="button button-primary setup-start-button" id="setup-start-button" data-i18n="setup.start" type="button">Start game</button>
+        <p class="setup-error" id="setup-error" role="alert" hidden></p>
+      </div>
+    </section>
+
+    <dialog class="action-dialog" id="game-action-dialog" aria-labelledby="action-dialog-heading" aria-describedby="action-dialog-description">
+      <form class="action-dialog-form" method="dialog">
+        <p class="section-label" id="action-dialog-eyebrow" data-i18n="dialog.eyebrow">GAME ACTION</p>
+        <h2 id="action-dialog-heading" data-i18n="takeback.request.heading">Request a takeback?</h2>
+        <p class="action-dialog-copy" id="action-dialog-description" data-i18n="takeback.request.description">Ask the other player to restore the position before your last move.</p>
+        <p class="action-dialog-error" id="action-dialog-error" role="alert" hidden></p>
+        <div class="action-dialog-actions">
+          <button class="button button-ghost" id="action-dialog-cancel" data-i18n="dialog.cancel" type="button">Cancel</button>
+          <button class="button button-ghost" id="action-dialog-reject" data-i18n="takeback.response.reject" type="button" hidden>Reject</button>
+          <button class="button button-primary" id="action-dialog-accept" data-i18n="takeback.response.accept" type="button" hidden>Accept</button>
+          <button class="button button-primary" id="action-dialog-primary" data-i18n="takeback.request.confirm" type="button">Request</button>
+          <button class="button button-danger" id="action-dialog-resign" data-i18n="resign.confirm" type="button" hidden>Resign</button>
+        </div>
+      </form>
+    </dialog>
+  </div>
+  <script src="/static/i18n.js"></script>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

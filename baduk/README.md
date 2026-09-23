@@ -8,12 +8,12 @@ Choose a 9×9, 13×13, or 19×19 board. The game supports captures, ko, passes, 
 
 ## Install and start
 
-Give a shell-capable LLM agent a [GitHub Release](https://github.com/hehee9/board-games-with-llm/releases) URL. It can install the prebuilt Baduk wheel with `uv`, verify the command, and set up the Codex skill when applicable.
+Give a shell-capable LLM agent a [GitHub Release](https://github.com/hehee9/board-games-with-llm/releases) URL. It can install the prebuilt Baduk wheel with `uv`, verify the command, and set up the `play-llm-baduk` skill for Codex, Claude Code, or OpenCode when requested.
 
 Copy this request and replace `<release URL>`:
 
 ```text
-Install and configure LLM Baduk from this GitHub Release: <release URL>. Read baduk/INSTALL.md from the same release tag, detect my operating system, preserve unrelated commands and unmanaged skills, verify the CLI, and leave the server ready for a game.
+Install and configure LLM Baduk from this GitHub Release: <release URL>. Read baduk/INSTALL.md from the same release tag, detect my operating system, install the play-llm-baduk skill for the assistant I use (Codex, Claude Code, or OpenCode), preserve unrelated commands and unmanaged skills, verify the CLI, and leave the server ready for a game.
 ```
 
 See [INSTALL.md](INSTALL.md) for the full installation guide and source-based alternatives. Installation leaves the server running. To start it again later, run:

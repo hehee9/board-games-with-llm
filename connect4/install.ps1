@@ -2,12 +2,12 @@
 param(
     [string]$WheelPath,
     [ValidateSet("codex", "claude", "opencode")]
-    [string[]]$Agent
+    [string[]]$Agent = @("codex")
 )
 
 $ErrorActionPreference = "Stop"
-$skillName = "play-llm-baduk"
-$packageName = "llm-baduk"
+$skillName = "play-llm-connect4"
+$packageName = "llm-connect4"
 $skillMarkerOwner = "$packageName`:$skillName"
 
 function _GetAgentSkillTarget {
@@ -155,21 +155,21 @@ if ($LASTEXITCODE -ne 0 -or -not $toolBin) {
 }
 $toolBin = [System.IO.Path]::GetFullPath($toolBin)
 
-$existingBaduk = Get-Command baduk -ErrorAction SilentlyContinue
-if ($existingBaduk) {
-    if ($existingBaduk.CommandType -notin @("Application", "ExternalScript") -or -not $existingBaduk.Path) {
-        throw "기존 baduk 명령을 보존했습니다. 명령 유형을 확인하세요: $($existingBaduk.CommandType)"
+$existingConnect4 = Get-Command connect4 -ErrorAction SilentlyContinue
+if ($existingConnect4) {
+    if ($existingConnect4.CommandType -notin @("Application", "ExternalScript") -or -not $existingConnect4.Path) {
+        throw "기존 connect4 명령을 보존했습니다. 명령 유형을 확인하세요: $($existingConnect4.CommandType)"
     }
-    $existingPath = [System.IO.Path]::GetFullPath($existingBaduk.Path)
+    $existingPath = [System.IO.Path]::GetFullPath($existingConnect4.Path)
     $toolBinPrefix = $toolBin.TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar) + [System.IO.Path]::DirectorySeparatorChar
     $isUvToolCommand = $existingPath.StartsWith($toolBinPrefix, [System.StringComparison]::OrdinalIgnoreCase)
     $installedTools = (& uv tool list | Out-String)
-    if (-not $isUvToolCommand -or $installedTools -notmatch "(?m)^llm-baduk(?:\s|$)") {
-        throw "기존 baduk 명령을 보존했습니다. 다른 명령 이름을 사용하려면 설치 대상을 수정하세요: $existingPath"
+    if (-not $isUvToolCommand -or $installedTools -notmatch "(?m)^llm-connect4(?:\s|$)") {
+        throw "기존 connect4 명령을 보존했습니다. 다른 명령 이름을 사용하려면 설치 대상을 수정하세요: $existingPath"
     }
 }
 
-& uv tool install --force --reinstall-package llm-baduk $installTarget
+& uv tool install --force --reinstall-package llm-connect4 $installTarget
 if ($LASTEXITCODE -ne 0) {
     throw "uv tool install이 종료 코드 $LASTEXITCODE로 실패했습니다."
 }
@@ -179,16 +179,16 @@ if ($LASTEXITCODE -ne 0) {
     throw "baduk 실행 경로 등록이 종료 코드 $LASTEXITCODE로 실패했습니다."
 }
 
-$badukExecutable = Join-Path $toolBin "baduk.exe"
-if (-not (Test-Path -LiteralPath $badukExecutable -PathType Leaf)) {
-    $badukExecutable = Join-Path $toolBin "baduk"
+$connect4Executable = Join-Path $toolBin "connect4.exe"
+if (-not (Test-Path -LiteralPath $connect4Executable -PathType Leaf)) {
+    $connect4Executable = Join-Path $toolBin "connect4"
 }
-if (-not (Test-Path -LiteralPath $badukExecutable -PathType Leaf)) {
-    throw "설치된 baduk 실행 파일을 찾지 못했습니다: $toolBin"
+if (-not (Test-Path -LiteralPath $connect4Executable -PathType Leaf)) {
+    throw "설치된 connect4 실행 파일을 찾지 못했습니다: $toolBin"
 }
-& $badukExecutable --help
+& $connect4Executable --help
 if ($LASTEXITCODE -ne 0) {
-    throw "설치된 baduk --help 검증이 종료 코드 $LASTEXITCODE로 실패했습니다."
+    throw "설치된 connect4 --help 검증이 종료 코드 $LASTEXITCODE로 실패했습니다."
 }
 
 if ($skillTargets.Count -gt 0) {
@@ -197,12 +197,12 @@ if ($skillTargets.Count -gt 0) {
         throw "uv tool 설치 환경 폴더를 확인하지 못했습니다."
     }
     $toolDirectory = [System.IO.Path]::GetFullPath($toolDirectory)
-    $skillSource = Join-Path $toolDirectory "llm-baduk\Lib\site-packages\llm_baduk\skills\$skillName"
+    $skillSource = Join-Path $toolDirectory "llm-connect4\Lib\site-packages\llm_connect4\skills\$skillName"
     foreach ($skillTarget in $skillTargets) {
         _InstallManagedSkill -SkillSource $skillSource -Target $skillTarget
     }
 }
 
-Write-Host "설치가 완료되었습니다: $badukExecutable"
+Write-Host "설치가 완료되었습니다: $connect4Executable"
 Write-Host "소스 또는 wheel에서 설치했습니다: $installTarget"
-Write-Host "새 터미널에서 baduk start를 실행하세요."
+Write-Host "새 터미널에서 connect4 start를 실행하세요."

@@ -1,6 +1,6 @@
 # Install LLM Baduk
 
-Give a shell-capable LLM agent a specific [GitHub Release](https://github.com/hehee9/board-games-with-llm/releases) URL for `hehee9/board-games-with-llm`. The agent can install the wheel for your operating system, add the Codex skill when applicable, and leave the game ready in your browser.
+Give a shell-capable LLM agent a specific [GitHub Release](https://github.com/hehee9/board-games-with-llm/releases) URL for `hehee9/board-games-with-llm`. The agent can install the wheel, add the `play-llm-baduk` skill for Codex, Claude Code, or OpenCode, and leave the game ready in your browser.
 
 ## Select the release
 
@@ -30,9 +30,17 @@ For a confirmed existing `llm-baduk` tool, use `uv tool install --force --reinst
 <baduk executable> --help
 ```
 
-## Add the Codex skill
+## Add the assistant skill
 
-For Codex installation or an explicit request for Codex integration, find `llm_baduk/skills/play-llm-baduk/` under `uv tool dir`. Copy the complete directory to `<CODEX_HOME>/skills/play-llm-baduk` when that destination is free, using `CODEX_HOME` when set or `.codex` in the user's home directory. Confirm `SKILL.md` and `agents/openai.yaml` at the destination. Preserve an existing destination and report the conflict. Open a new Codex task to discover a newly installed skill. Other LLM environments can use the installed command directly.
+Find `llm_baduk/skills/play-llm-baduk/` under `uv tool dir`. Copy the **whole** packaged skill folder, including `SKILL.md` and `agents/openai.yaml`, to the directory for each assistant you use:
+
+| Assistant | Skill directory |
+| --- | --- |
+| Codex | `$CODEX_HOME/skills/play-llm-baduk`, or `~/.codex/skills/play-llm-baduk` when `CODEX_HOME` is unset |
+| Claude Code | `$CLAUDE_CONFIG_DIR/skills/play-llm-baduk`, or `~/.claude/skills/play-llm-baduk` when `CLAUDE_CONFIG_DIR` is unset |
+| OpenCode | `$OPENCODE_CONFIG_DIR/skills/play-llm-baduk`, or `~/.config/opencode/skills/play-llm-baduk` when `OPENCODE_CONFIG_DIR` is unset |
+
+From the source folder on Windows, `.\install.ps1 -Agent codex`, `.\install.ps1 -Agent claude`, or `.\install.ps1 -Agent opencode` installs the selected skill as well as the command; select multiple assistants with `.\install.ps1 -Agent claude,opencode`. With no `-Agent`, the script installs the command only. It preserves an existing skill that it did not install and updates only its own marked installation. When installing manually, preserve an existing skill directory and report a conflict rather than replacing it. Start a new assistant session to discover the skill. The `baduk` command also works without a skill.
 
 ## Start the game
 
@@ -56,9 +64,9 @@ uv tool install <wheel-path>
 uv tool update-shell
 ```
 
-Replace `<wheel-path>` with the generated `llm_baduk-*-py3-none-any.whl` path. Check command ownership as above before installing, then run `baduk --help` and `baduk start`. On Windows, `install.ps1` installs from the source folder or accepts a local wheel through `-WheelPath`; it checks for an existing `baduk` command.
+Replace `<wheel-path>` with the generated `llm_baduk-*-py3-none-any.whl` path. Check command ownership as above before installing, then run `baduk --help` and `baduk start`. On Windows, `install.ps1` installs from the source folder or accepts a local wheel through `-WheelPath`; it checks for an existing `baduk` command. Add `-Agent` to install a skill for the selected assistant or assistants.
 
-At the end, report the release tag and wheel asset, executable path and `--help` result, Codex skill status when applicable, and server URL and game status.
+At the end, report the release tag and wheel asset, executable path and `--help` result, skill status for each selected assistant, and server URL and game status.
 
 ## License
 

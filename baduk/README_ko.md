@@ -8,12 +8,12 @@ LLM과 바둑을 두거나 두 LLM의 대국을 관전할 수 있는 프로그�
 
 ## 설치하고 시작하기
 
-명령어를 실행할 수 있는 LLM 에이전트에게 [GitHub 릴리스](https://github.com/hehee9/board-games-with-llm/releases) 주소를 전달하세요. 에이전트가 미리 빌드된 바둑 프로그램을 `uv`로 설치하고 명령어를 확인하며, Codex를 쓴다면 스킬도 설정할 수 있습니다.
+명령어를 실행할 수 있는 LLM 에이전트에게 [GitHub 릴리스](https://github.com/hehee9/board-games-with-llm/releases) 주소를 전달하세요. 에이전트가 미리 빌드된 바둑 프로그램을 `uv`로 설치하고 명령어를 확인하며, 요청하면 Codex·Claude Code·OpenCode에서 사용할 `play-llm-baduk` 스킬도 설정할 수 있습니다.
 
 다음 요청에서 `<release URL>`을 실제 릴리스 주소로 바꿔 전달하면 됩니다.
 
 ```text
-Install and configure LLM Baduk from this GitHub Release: <release URL>. Read baduk/INSTALL.md from the same release tag, detect my operating system, preserve unrelated commands and unmanaged skills, verify the CLI, and leave the server ready for a game.
+Install and configure LLM Baduk from this GitHub Release: <release URL>. Read baduk/INSTALL.md from the same release tag, detect my operating system, install the play-llm-baduk skill for the assistant I use (Codex, Claude Code, or OpenCode), preserve unrelated commands and unmanaged skills, verify the CLI, and leave the server ready for a game.
 ```
 
 전체 설치 절차와 소스에서 실행하는 방법은 [INSTALL.md](INSTALL.md)에 있습니다. 설치가 끝나면 서버가 실행된 상태로 남습니다. 나중에 다시 시작할 때는 다음 명령을 사용하세요.

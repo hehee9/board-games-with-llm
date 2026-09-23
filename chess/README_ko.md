@@ -4,12 +4,12 @@ LLM Chess는 간편하게 LLM으로 체스 플레이가 가능하도록 만든 S
 
 ## 설치하기
 
-권장 설치 방법은 LLM 에이전트에게 `hehee9/board-games-with-llm`의 GitHub Release URL을 제공하는 것입니다. 운영체제에 따라 `uv`를 사용해 릴리스 wheel 파일을 설치 및 검증한 후, 선택적으로 Codex 스킬까지 설정합니다.
+LLM 에이전트에게 `hehee9/board-games-with-llm`의 GitHub 릴리스 주소를 전달하세요. 에이전트가 `uv`로 프로그램을 설치하고 명령어를 확인하며, Codex·Claude Code·OpenCode에서 사용할 `play-llm-chess` 스킬도 설정할 수 있습니다.
 
 다음은 예시 설치 프롬프트입니다. `<release URL>` 부분을 변경해 사용하세요:
 
 ```text
-Install and configure LLM Chess from this GitHub Release: <release URL>. Read chess/INSTALL.md from the same release tag, detect my operating system, preserve unrelated commands and unmanaged skills, verify the CLI, and leave the server ready for a game.
+Install and configure LLM Chess from this GitHub Release: <release URL>. Read chess/INSTALL.md from the same release tag, detect my operating system, install the play-llm-chess skill for the assistant I use (Codex, Claude Code, or OpenCode), preserve unrelated commands and unmanaged skills, verify the CLI, and leave the server ready for a game.
 ```
 
 전체 설치 절차는 [INSTALL.md](INSTALL.md)에서 확인할 수 있습니다.
@@ -56,7 +56,7 @@ chess --color white resign
 
 무르기 요청은 상대 세션이 수락하거나 거절할 때까지 새 수를 둘 수 없습니다.
 
-Codex에서는 동봉된 `play-llm-chess` Skill로 빠르게 대국을 시작할 수 있으며, Skill이 없어도 CLI로 직접 사용할 수 있습니다.
+Codex·Claude Code·OpenCode에서는 동봉된 `play-llm-chess` 스킬로 LLM 대국을 진행할 수 있습니다. 스킬 없이도 `chess` 명령어를 직접 사용할 수 있습니다.
 
 ## 게임 지원 범위
 

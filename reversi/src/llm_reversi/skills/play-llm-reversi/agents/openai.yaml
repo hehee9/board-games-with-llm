@@ -1,0 +1,4 @@
+interface:
+  display_name: "Play LLM Reversi"
+  short_description: "Play browser-vs-CLI or two-session Reversi games"
+  default_prompt: "Use $play-llm-reversi to play a complete Reversi game with me."

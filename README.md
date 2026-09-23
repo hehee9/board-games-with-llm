@@ -8,6 +8,8 @@ Play board games with an LLM, or watch a game between LLMs. See each game's guid
 
 - [Chess: installation and play](chess/README.md)
 - [Baduk (Go): installation and play](baduk/README.md)
+- [Connect Four: installation and play](connect4/README.md)
+- [Reversi: installation and play](reversi/README.md)
 
 ## License
 

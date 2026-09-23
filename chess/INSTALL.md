@@ -1,6 +1,6 @@
 # Install LLM Chess
 
-Give a shell-capable LLM agent a specific [GitHub Release](https://github.com/hehee9/board-games-with-llm/releases) URL for `hehee9/board-games-with-llm`. The agent can install the wheel for your operating system, add the Codex skill when applicable, and leave the game ready in your browser.
+Give a shell-capable LLM agent a specific [GitHub Release](https://github.com/hehee9/board-games-with-llm/releases) URL for `hehee9/board-games-with-llm`. The agent can install the wheel, add the `play-llm-chess` skill for Codex, Claude Code, or OpenCode, and leave the game ready in your browser.
 
 ## Select the release
 
@@ -31,19 +31,20 @@ If the tool executable directory is missing from the user's `PATH`, run `uv tool
 <chess executable> --help
 ```
 
-## Add the Codex skill
+## Add the assistant skill
 
-For Codex installation or an explicit request for Codex integration, find `llm_chess/skills/play-llm-chess/` under `uv tool dir`. Its `SKILL.md` and `agents/openai.yaml` files must be present. Use `CODEX_HOME` when set, or `.codex` in the user's home directory, and set these paths:
+Find `llm_chess/skills/play-llm-chess/` under `uv tool dir`. Copy the **whole** packaged skill folder, including `SKILL.md` and `agents/openai.yaml`, to the directory for each assistant you use:
 
-```text
-<CODEX_HOME>/skills/play-llm-chess
-<CODEX_HOME>/skills/play-llm-chess.llm-chess-managed
-```
+| Assistant | Skill directory |
+| --- | --- |
+| Codex | `$CODEX_HOME/skills/play-llm-chess`, or `~/.codex/skills/play-llm-chess` when `CODEX_HOME` is unset |
+| Claude Code | `$CLAUDE_CONFIG_DIR/skills/play-llm-chess`, or `~/.claude/skills/play-llm-chess` when `CLAUDE_CONFIG_DIR` is unset |
+| OpenCode | `$OPENCODE_CONFIG_DIR/skills/play-llm-chess`, or `~/.config/opencode/skills/play-llm-chess` when `OPENCODE_CONFIG_DIR` is unset |
 
-The second path is an ownership marker containing exactly `llm-chess:play-llm-chess`. Preserve an existing skill without that marker, or with a different marker, and report the conflict. For a new skill or an existing skill with the exact marker, copy the complete packaged skill to a sibling staging directory and validate both files there before placing it at the destination. When replacing a managed skill, retain the previous directory and restore it if replacement fails. Write the marker for a new installation, and confirm both files at the destination. Open a new Codex task to discover the skill. Other LLM environments can use the installed command directly.
+From the source folder on Windows, run `.\install.ps1 -Agent codex`, `.\install.ps1 -Agent claude`, or `.\install.ps1 -Agent opencode`; select multiple assistants with `.\install.ps1 -Agent claude,opencode`. Its default is Codex. It preserves an existing skill that it did not install and updates only its own marked installation. When installing manually, preserve an existing skill directory and report a conflict rather than replacing it. Start a new assistant session to discover the skill. The `chess` command also works without a skill.
 
 ## Start the game
 
 Run `<chess executable> start` in a persistent process. From a separate shell, run `<chess executable> status` and confirm that the browser page is available at the local URL printed by `start`. A new server reports `setup` in the **Status** field; an existing LLM Chess game retains its current state. Leave the server running for the user to choose a color and play. If another application occupies the local address, report the conflict while leaving that application running.
 
-At the end, report the release tag and wheel asset, executable path and `--help` result, Codex skill status when applicable, and server URL and game status.
+At the end, report the release tag and wheel asset, executable path and `--help` result, skill status for each selected assistant, and server URL and game status.

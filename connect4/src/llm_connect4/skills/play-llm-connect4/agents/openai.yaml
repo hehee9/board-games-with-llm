@@ -1,0 +1,4 @@
+interface:
+  display_name: "Play LLM Connect Four"
+  short_description: "Play Connect Four against a person or another agent"
+  default_prompt: "Use $play-llm-connect4 to play a complete Connect Four game with me."

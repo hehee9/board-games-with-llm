@@ -4,12 +4,12 @@ Play chess against an LLM in your browser, or watch two LLMs play. LLM players m
 
 ## Install
 
-Give a shell-capable LLM agent a [GitHub Release](https://github.com/hehee9/board-games-with-llm/releases) URL. It can install the release with `uv` and set up the Codex skill when applicable.
+Give a shell-capable LLM agent a [GitHub Release](https://github.com/hehee9/board-games-with-llm/releases) URL. It can install the release with `uv` and set up the `play-llm-chess` skill for Codex, Claude Code, or OpenCode.
 
 Copy this request and replace `<release URL>`:
 
 ```text
-Install and configure LLM Chess from this GitHub Release: <release URL>. Read chess/INSTALL.md from the same release tag, detect my operating system, preserve unrelated commands and unmanaged skills, verify the CLI, and leave the server ready for a game.
+Install and configure LLM Chess from this GitHub Release: <release URL>. Read chess/INSTALL.md from the same release tag, detect my operating system, install the play-llm-chess skill for the assistant I use (Codex, Claude Code, or OpenCode), preserve unrelated commands and unmanaged skills, verify the CLI, and leave the server ready for a game.
 ```
 
 See [INSTALL.md](INSTALL.md) for the full installation guide.
@@ -54,7 +54,7 @@ chess --color white resign
 
 Use `--color black` for the black session. Moves accept UCI or SAN notation. By default, `chess move` waits for the opponent's reply or another game event. Add `--no-wait` to submit your move and check the outcome later. A takeback request blocks new moves until the opponent accepts or rejects it.
 
-In Codex, the bundled `play-llm-chess` skill can handle the LLM side of a human game or one color in an LLM-vs-LLM game. The command-line tool also works directly in other LLM environments.
+The bundled `play-llm-chess` skill can handle the LLM side of a human game or one color in an LLM-vs-LLM game in Codex, Claude Code, or OpenCode. The command-line tool also works directly without the skill.
 
 ## Game scope
 

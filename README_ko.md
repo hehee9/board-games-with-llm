@@ -8,6 +8,8 @@ LLM과 보드게임을 플레이하거나, LLM 간의 게임을 관전할 수 �
 
 - [체스: 설치와 플레이 방법](chess/README_ko.md)
 - [바둑: 설치와 플레이 방법](baduk/README_ko.md)
+- [커넥트 포: 설치와 플레이 방법](connect4/README_ko.md)
+- [리버시: 설치와 플레이 방법](reversi/README_ko.md)
 
 ## 라이선스
 

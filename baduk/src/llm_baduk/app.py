@@ -67,7 +67,7 @@ class WaitRequest(BaseModel):
 
 
 manager = GameManager()
-app = FastAPI(title="llm-baduk", version="0.1.0")
+app = FastAPI(title="llm-baduk", version="0.1.1")
 
 
 def _raise_game_error(error: GameError) -> None:

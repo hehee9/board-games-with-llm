@@ -3,9 +3,9 @@ requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
-name = "llm-baduk"
-version = "0.1.1"
-description = "로컬 사람 대 언어 모델 바둑 앱"
+name = "llm-reversi"
+version = "0.1.0"
+description = "로컬 사람 대 언어 모델 리버시 앱"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "GPL-3.0-or-later"
@@ -21,10 +21,10 @@ Repository = "https://github.com/hehee9/board-games-with-llm"
 Issues = "https://github.com/hehee9/board-games-with-llm/issues"
 
 [project.scripts]
-baduk = "llm_baduk.cli:main"
+reversi = "llm_reversi.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/llm_baduk"]
+packages = ["src/llm_reversi"]
 
 [tool.hatch.build.targets.sdist]
 include = [
@@ -32,7 +32,7 @@ include = [
     "/README.md",
     "/README_ko.md",
     "/INSTALL.md",
-    "/src/llm_baduk",
+    "/src/llm_reversi",
     "/install.ps1",
     "/start.cmd",
 ]
