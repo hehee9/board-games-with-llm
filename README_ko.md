@@ -1,62 +1,14 @@
-# LLM Chess
+# Board Games with LLM
 
-LLM Chess는 사람이 브라우저 보드에서 대국하고 LLM이 CLI로 수를 전달하는 로컬 체스 작업대입니다. 양측은 로컬 서버가 관리하는 하나의 표준 체스 게임을 함께 공유합니다.
+LLM과 보드게임을 플레이하거나, LLM 간의 게임을 관전할 수 있습니다. 게임별 안내에서 설치와 플레이 방법을 확인하세요.
 
-## LLM으로 설치하기
+[English](README.md)
 
-권장 설치 방법은 셸 실행 권한이 있는 LLM 에이전트에게 `hehee9/chess-with-llm`의 GitHub Release URL을 제공하는 것입니다. 에이전트가 운영체제를 감지하고, `uv`를 사용해 릴리스 wheel 파일을 설치하며, 선택 사항인 Codex 스킬을 설정하고 CLI를 검증한 뒤 로컬 서버를 대국 가능한 상태로 준비합니다.
+## 게임 선택
 
-다음 요청문을 복사한 뒤 `<release URL>` 부분을 변경하여 사용하세요:
-
-```text
-Install and configure LLM Chess from this GitHub Release: <release URL>. Read INSTALL.md from the same release tag, detect my operating system, preserve unrelated commands and unmanaged skills, verify the CLI, and leave the server ready for a game.
-```
-
-에이전트의 전체 설치 절차는 [INSTALL.md](INSTALL.md)에서 확인할 수 있습니다.
-
-## 게임 시작하기
-
-설치 후 로컬 서버가 브라우저 URL을 출력하고 자동으로 엽니다. 서버가 아직 실행 중이지 않다면 다음 명령어로 시작하세요:
-
-```text
-chess start
-```
-
-브라우저에서:
-
-1. 언어를 선택합니다. 처음 방문하면 지원되는 브라우저 언어 또는 English를 사용하고, 이후에는 저장된 선택을 사용합니다.
-2. **백으로 플레이** 또는 **흑으로 플레이**를 선택합니다.
-3. 말을 클릭한 뒤 이동할 위치를 클릭하거나, 말을 드래그하여 이동합니다.
-4. 폰 승진 시 퀸, 룩, 비숍, 나이트 중 하나를 선택합니다.
-5. 사이드 레일에서 현재 차례, 마지막 수, 수순 기록을 확인합니다.
-6. **무르기**를 눌러 자신의 가장 최근 수를 무르기 요청할 수 있습니다. 상대방의 승인 시 무르기가 성립됩니다.
-7. **기권**을 누르면 대국이 즉시 종료됩니다.
-8. **새 대국**을 눌러 색상 선택으로 돌아갈 수 있습니다.
-
-## LLM CLI
-
-LLM은 `chess --help`로 시작하여 해당 출력을 현재 명령어 규약으로 취급해야 합니다. 주요 명령어는 다음과 같습니다:
-
-```text
-chess status
-chess wait
-chess move e7e5
-chess takeback request
-chess takeback accept
-chess takeback reject
-chess resign
-```
-
-`chess move`는 UCI 또는 SAN 표기법을 지원합니다. UCI 표기법 예시로는 `e7e5` 및 승진 시 `e7e8q` 등이 있습니다. 기본 이동 명령어는 사람의 응답을 기다리며, 즉각적인 반환이 필요한 경우 `--no-wait`를 추가합니다.
-
-`chess takeback request`는 LLM의 가장 최근 수를 무르기 요청하고 사람이 승인하거나 거부할 때까지 반환하지 않습니다. 사람이 무르기를 요청하면  `chess takeback accept` 또는 `chess takeback reject`로 응답합니다. `chess resign`을 실행하면 대국이 즉시 종료됩니다.
-
-Codex에서는 기본 제공되는 `play-llm-chess` 스킬이 전체 턴 루프를 관리합니다. 다른 LLM 환경에서는 CLI를 통해 동일한 게임을 직접 조작할 수 있습니다.
-
-## 게임 범위
-
-서버는 메모리에 하나의 게임만 유지합니다. 애플리케이션은 표준 규칙에 따른 합법적인 이동, 캐슬링, 앙파상, 승진, 체크, 체크메이트, 무승부 감지, 양측의 무르기 요청 및 기권을 지원합니다. 서버를 재시작하면 새로운 준비(setup) 상태로 시작됩니다.
+- [체스: 설치와 플레이 방법](chess/README_ko.md)
+- [바둑: 설치와 플레이 방법](baduk/README_ko.md)
 
 ## 라이선스
 
-LLM Chess는 [GNU General Public License v3.0 이상](LICENSE)에 따라 배포됩니다.
+[GNU General Public License v3.0 이상](LICENSE)을 따릅니다.

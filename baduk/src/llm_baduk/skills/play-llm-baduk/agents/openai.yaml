@@ -1,0 +1,4 @@
+interface:
+  display_name: "Play LLM Baduk"
+  short_description: "브라우저 대 CLI 바둑 대국을 끝까지 진행"
+  default_prompt: "Use $play-llm-baduk to play a complete browser-vs-CLI baduk game with me."

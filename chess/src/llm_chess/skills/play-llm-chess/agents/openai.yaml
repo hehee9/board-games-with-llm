@@ -1,0 +1,4 @@
+interface:
+  display_name: "Play LLM Chess"
+  short_description: "Play human-vs-LLM or CLI-vs-CLI chess"
+  default_prompt: "Use $play-llm-chess to play a human-vs-LLM game or one side of a CLI-vs-CLI game."

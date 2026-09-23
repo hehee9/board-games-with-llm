@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "llm-baduk"
+version = "0.1.0"
+description = "로컬 사람 대 언어 모델 바둑 앱"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+dependencies = [
+    "fastapi>=0.115,<1",
+    "httpx>=0.27,<1",
+    "uvicorn[standard]>=0.30,<1",
+]
+
+[project.urls]
+Repository = "https://github.com/hehee9/board-games-with-llm"
+Issues = "https://github.com/hehee9/board-games-with-llm/issues"
+
+[project.scripts]
+baduk = "llm_baduk.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llm_baduk"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/LICENSE",
+    "/README.md",
+    "/README_ko.md",
+    "/INSTALL.md",
+    "/src/llm_baduk",
+    "/install.ps1",
+    "/start.cmd",
+]
+
+[dependency-groups]
+test = ["pytest>=8", "pytest-asyncio>=0.24"]
